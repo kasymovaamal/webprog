@@ -1,0 +1,11 @@
+body {
+  background-color: lightgray;
+}
+
+p {
+  color: darkgreen;
+}
+
+.special {
+  background-color: lightblue;
+}

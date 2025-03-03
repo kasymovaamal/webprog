@@ -1,0 +1,15 @@
+.red-text {
+  color: red;
+}
+
+.orange-bg {
+  background-color: #FF4500;
+}
+
+.blue-text {
+  color: blue;
+}
+
+.transparent-bg {
+  background-color: rgba(0, 128, 0, 0.5);
+}
