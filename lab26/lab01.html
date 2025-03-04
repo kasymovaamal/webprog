@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lab 5 - @font-face Custom Font</title>
+  <style>
+    @font-face {
+      font-family: 'MyCustomFont';
+      src: url('fonts/MyCustomFont.woff2') format('woff2'),
+           url('fonts/MyCustomFont.woff') format('woff');
+    }
+    h1 {
+      font-family: 'MyCustomFont', sans-serif;
+    }
+    p {
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>Heading with Custom Font</h1>
+  <p>This paragraph uses the default Arial font.</p>
+</body>
+</html>
