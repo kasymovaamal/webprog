@@ -1,0 +1,20 @@
+.linear-gradient {
+    width: 500px;
+    height: 200px;
+    background: linear-gradient(to right, red, yellow);
+    color: black;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 2px solid black;
+}
+
+.radial-gradient {
+    width: 500px;
+    height: 200px;
+    background: radial-gradient(circle, blue, green);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border: 2px solid black;
+}
