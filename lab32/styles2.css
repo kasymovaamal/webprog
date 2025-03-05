@@ -1,0 +1,13 @@
+.expand-button {
+    background-color: lightgreen;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.expand-button:hover {
+    transform: scale(1.2);
+}
