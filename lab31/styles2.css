@@ -1,0 +1,16 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+.box {
+    background-color: lightcoral;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
