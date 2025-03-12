@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 2: Mouse Hover</title>
+    <style>
+        .box {
+            width: 200px;
+            height: 200px;
+            background-color: lightgray;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box" onmouseover="changeColor(this)" onmouseout="resetColor(this)"></div>
+
+    <script>
+        function changeColor(element) {
+            element.style.backgroundColor = "blue";
+        }
+
+        function resetColor(element) {
+            element.style.backgroundColor = "lightgray";
+        }
+    </script>
+</body>
+</html>

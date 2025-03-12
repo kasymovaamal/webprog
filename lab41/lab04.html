@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 4: Multiple Events</title>
+    <style>
+        #myButton {
+            padding: 10px 20px;
+            background-color: lightgray;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="myButton">Click or Hover</button>
+
+    <script>
+        const button = document.getElementById("myButton");
+
+        button.addEventListener("click", () => {
+            button.style.backgroundColor = "green";
+        });
+
+        button.addEventListener("mouseover", () => {
+            button.style.backgroundColor = "blue";
+        });
+
+        button.addEventListener("mouseout", () => {
+            button.style.backgroundColor = "lightgray";
+        });
+    </script>
+</body>
+</html>
