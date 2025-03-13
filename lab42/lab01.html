@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 1: Get Data</title>
+</head>
+<body>
+    <input type="text" id="username" placeholder="Enter your username">
+    <button onclick="displayUsername()">Submit</button>
+    <p id="output"></p>
+
+    <script>
+        function displayUsername() {
+            const username = document.getElementById("username").value;
+            document.getElementById("output").innerText = "Username: " + username;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 5: Form Submission</title>
+</head>
+<body>
+    <form id="myForm">
+        <input type="text" id="name" placeholder="Enter your name">
+        <input type="email" id="email" placeholder="Enter your email">
+        <input type="text" id="age" placeholder="Enter your age">
+        <button type="submit">Submit</button>
+    </form>
+    <p id="message"></p>
+
+    <script>
+        document.getElementById("myForm").addEventListener("submit", function(event) {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const age = document.getElementById("age").value;
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (name === "" || email === "" || age === "") {
+                alert("Please fill in all fields!");
+                event.preventDefault();
+            } else if (!emailPattern.test(email)) {
+                alert("Please enter a valid email address!");
+                event.preventDefault();
+            } else if (isNaN(age)) {
+                alert("Please enter a valid number for age!");
+                event.preventDefault();
+            } else {
+                document.getElementById("message").innerText = "Form submitted successfully!";
+                event.preventDefault(); // Prevent actual form submission for this example
+            }
+        });
+    </script>
+</body>
+</html>
