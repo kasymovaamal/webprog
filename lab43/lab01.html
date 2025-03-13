@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 1: Style Property</title>
+</head>
+<body>
+    <p id="text">This is a paragraph.</p>
+    <button onclick="changeStyles()">Change Styles</button>
+
+    <script>
+        function changeStyles() {
+            const text = document.getElementById("text");
+            text.style.color = "white";
+            text.style.backgroundColor = "black";
+            text.style.fontSize = "24px";
+        }
+    </script>
+</body>
+</html>

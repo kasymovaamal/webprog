@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 3: setTimeout</title>
+    <style>
+        #text {
+            opacity: 1;
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <p id="text">This is a paragraph.</p>
+    <button onclick="fadeOut()">Fade Out</button>
+
+    <script>
+        function fadeOut() {
+            const text = document.getElementById("text");
+            let opacity = 1;
+            const interval = setInterval(() => {
+                if (opacity <= 0) {
+                    clearInterval(interval);
+                } else {
+                    opacity -= 0.1;
+                    text.style.opacity = opacity;
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>

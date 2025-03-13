@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 5: Blinking Text</title>
+</head>
+<body>
+    <p id="text">Blinking Text</p>
+
+    <script>
+        const text = document.getElementById("text");
+        let isRed = true;
+
+        setInterval(() => {
+            text.style.color = isRed ? "blue" : "red";
+            isRed = !isRed;
+        }, 1000);
+    </script>
+</body>
+</html>
