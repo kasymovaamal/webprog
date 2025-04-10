@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="mb-4">My Tasks</h1>
+    
+    {% if tasks %}
+        <div class="list-group">
+            {% for task in tasks %}
+                <div class="list-group-item {% if task.completed %}list-group-item-success{% endif %}">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">
+                            <form action="{{ url_for('main.toggle_task', task_id=task.id) }}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sm {% if task.completed %}btn-success{% else %}btn-outline-secondary{% endif %} me-2">
+                                    ✓
+                                </button>
+                            </form>
+                            {{ task.title }}
+                        </h5>
+                        <small>{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else '' }}</small>
+                    </div>
+                    <p class="mb-1">{{ task.description }}</p>
+                    <small>Created: {{ task.created_at.strftime('%Y-%m-%d') }}</small>
+                    <div class="mt-2">
+                        <a href="{{ url_for('main.edit_task', task_id=task.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <form action="{{ url_for('main.delete_task', task_id=task.id) }}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">No tasks yet. <a href="{{ url_for('main.add_task') }}">Add your first task!</a></div>
+    {% endif %}
+{% endblock %}
