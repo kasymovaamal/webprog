@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 5: Editable Tasks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #taskInput {
+            padding: 8px;
+            width: 70%;
+        }
+        #addTask {
+            padding: 8px 15px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 8px;
+            margin: 5px 0;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .delete-btn, .edit-btn {
+            cursor: pointer;
+        }
+        .delete-btn {
+            color: red;
+        }
+        .edit-btn {
+            color: blue;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+        .edit-input {
+            width: 60%;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editable Task List</h1>
+    <input type="text" id="taskInput" placeholder="Enter a task">
+    <button id="addTask">Add Task</button>
+    <ul id="taskList"></ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', loadTasks);
+
+        function loadTasks() {
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            const taskList = document.getElementById('taskList');
+
+            tasks.forEach(task => {
+                const li = createTaskElement(task.text, task.completed);
+                taskList.appendChild(li);
+            });
+        }
+
+        function saveTasks() {
+            const tasks = [];
+            document.querySelectorAll('#taskList li').forEach(li => {
+                const textElement = li.querySelector('.task-text') ||
+                                    li.querySelector('.edit-input');
+                const text = textElement.tagName === 'INPUT' ?
+                            textElement.value : textElement.textContent;
+
+                tasks.push({
+                    text: text,
+                    completed: li.classList.contains('completed')
+                });
+            });
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        function createTaskElement(text, completed = false) {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span class="task-text">${text}</span>
+                <span class="task-actions">
+                    <span class="edit-btn">Edit</span>
+                    <span class="delete-btn">X</span>
+                </span>
+            `;
+
+            if (completed) {
+                li.classList.add('completed');
+            }
+
+            li.onclick = function(e) {
+                if (!e.target.classList.contains('delete-btn') &&
+                    !e.target.classList.contains('edit-btn')) {
+                    li.classList.toggle('completed');
+                    saveTasks();
+                }
+            };
+
+            li.querySelector('.delete-btn').onclick = function() {
+                li.remove();
+                saveTasks();
+            };
+
+            li.querySelector('.edit-btn').onclick = function(e) {
+                e.stopPropagation();
+                const textElement = li.querySelector('.task-text');
+                const currentText = textElement.textContent;
+
+                li.innerHTML = `
+                    <input class="edit-input" value="${currentText}">
+                    <span class="task-actions">
+                        <span class="save-btn">Save</span>
+                        <span class="cancel-btn">Cancel</span>
+                    </span>
+                `;
+
+                const input = li.querySelector('.edit-input');
+                input.focus();
+
+                li.querySelector('.save-btn').onclick = function() {
+                    const newText = input.value.trim();
+                    if (newText) {
+                        li.innerHTML = `
+                            <span class="task-text">${newText}</span>
+                            <span class="task-actions">
+                                <span class="edit-btn">Edit</span>
+                                <span class="delete-btn">X</span>
+                            </span>
+                        `;
+                        setupTaskEvents(li);
+                        saveTasks();
+                    }
+                };
+
+                li.querySelector('.cancel-btn').onclick = function() {
+                    li.innerHTML = `
+                        <span class="task-text">${currentText}</span>
+                        <span class="task-actions">
+                            <span class="edit-btn">Edit</span>
+                            <span class="delete-btn">X</span>
+                        </span>
+                    `;
+                    setupTaskEvents(li);
+                };
+            };
+
+            return li;
+        }
+
+        function setupTaskEvents(li) {
+            li.onclick = function(e) {
+                if (!e.target.classList.contains('delete-btn') &&
+                    !e.target.classList.contains('edit-btn')) {
+                    li.classList.toggle('completed');
+                    saveTasks();
+                }
+            };
+
+            li.querySelector('.delete-btn').onclick = function() {
+                li.remove();
+                saveTasks();
+            };
+
+            li.querySelector('.edit-btn').onclick = function(e) {
+                e.stopPropagation();
+                const textElement = li.querySelector('.task-text');
+                const currentText = textElement.textContent;
+
+                li.innerHTML = `
+                    <input class="edit-input" value="${currentText}">
+                    <span class="task-actions">
+                        <span class="save-btn">Save</span>
+                        <span class="cancel-btn">Cancel</span>
+                    </span>
+                `;
+
+                const input = li.querySelector('.edit-input');
+                input.focus();
+
+                li.querySelector('.save-btn').onclick = function() {
+                    const newText = input.value.trim();
+                    if (newText) {
+                        li.innerHTML = `
+                            <span class="task-text">${newText}</span>
+                            <span class="task-actions">
+                                <span class="edit-btn">Edit</span>
+                                <span class="delete-btn">X</span>
+                            </span>
+                        `;
+                        setupTaskEvents(li);
+                        saveTasks();
+                    }
+                };
+
+                li.querySelector('.cancel-btn').onclick = function() {
+                    li.innerHTML = `
+                        <span class="task-text">${currentText}</span>
+                        <span class="task-actions">
+                            <span class="edit-btn">Edit</span>
+                            <span class="delete-btn">X</span>
+                        </span>
+                    `;
+                    setupTaskEvents(li);
+                };
+            };
+        }
+
+        document.getElementById('addTask').onclick = function() {
+            const taskInput = document.getElementById('taskInput');
+            const taskText = taskInput.value.trim();
+
+            if (taskText === '') {
+                alert('Task cannot be empty!');
+                return;
+            }
+
+            const li = createTaskElement(taskText);
+            document.getElementById('taskList').appendChild(li);
+            taskInput.value = '';
+            saveTasks();
+        };
+    </script>
+</body>
+</html>
