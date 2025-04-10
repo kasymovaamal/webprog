@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bonus: Local Storage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .gallery-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .gallery-img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow: auto;
+        }
+        .modal-content {
+            display: block;
+            margin: auto;
+            max-width: 80%;
+            max-height: 80%;
+            margin-top: 5%;
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 0 3px 3px 0;
+        }
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .info {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gallery with Local Storage</h1>
+    <p style="text-align: center;">Last viewed image will be remembered after refresh</p>
+    <div class="gallery-container" id="gallery-container"></div>
+
+    <!-- Modal Structure -->
+    <div id="modal" class="modal" onclick="closeModal()">
+        <span class="close" onclick="event.stopPropagation(); closeModal()">&times;</span>
+        <a class="prev" onclick="event.stopPropagation(); plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="event.stopPropagation(); plusSlides(1)">&#10095;</a>
+        <img class="modal-content" id="modal-image">
+        <div class="info" id="image-info"></div>
+    </div>
+
+    <script>
+        // Image data
+        const imageData = [
+            { url: 'https://source.unsplash.com/random/600x400?mountain1', alt: 'Mountain View 1', desc: 'Beautiful mountain landscape' },
+            { url: 'https://source.unsplash.com/random/600x400?mountain2', alt: 'Mountain View 2', desc: 'Snowy peaks under blue sky' },
+            { url: 'https://source.unsplash.com/random/600x400?mountain3', alt: 'Mountain View 3', desc: 'Sunset over the mountains' },
+            { url: 'https://source.unsplash.com/random/600x400?mountain4', alt: 'Mountain View 4', desc: 'Green valleys between peaks' },
+            { url: 'https://source.unsplash.com/random/600x400?mountain5', alt: 'Mountain View 5', desc: 'Clouds covering mountain tops' },
+            { url: 'https://source.unsplash.com/random/600x400?mountain6', alt: 'Mountain View 6', desc: 'Panoramic mountain range' }
+        ];
+
+        const galleryContainer = document.getElementById('gallery-container');
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modal-image');
+        const imageInfo = document.getElementById('image-info');
+        let currentIndex = 0;
+
+        // Check local storage for last viewed image
+        function checkLocalStorage() {
+            const lastViewed = localStorage.getItem('lastViewedImage');
+            if (lastViewed) {
+                const index = imageData.findIndex(img => img.url === lastViewed);
+                if (index !== -1) {
+                    currentIndex = index;
+                    openModal(currentIndex);
+                }
+            }
+        }
+
+        // Dynamically create gallery images
+        function createGallery() {
+            imageData.forEach((image, index) => {
+                const imgElement = document.createElement('img');
+                imgElement.src = image.url.replace('600x400', '300x300');
+                imgElement.alt = image.alt;
+                imgElement.classList.add('gallery-img');
+                imgElement.onclick = () => openModal(index);
+                galleryContainer.appendChild(imgElement);
+            });
+        }
+
+        function openModal(index) {
+            currentIndex = index;
+            modal.style.display = 'block';
+            modalImg.src = imageData[currentIndex].url;
+            modalImg.alt = imageData[currentIndex].alt;
+            imageInfo.textContent = `${currentIndex + 1}/${imageData.length} - ${imageData[currentIndex].desc}`;
+
+            // Save to local storage
+            localStorage.setItem('lastViewedImage', imageData[currentIndex].url);
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        function plusSlides(n) {
+            currentIndex += n;
+            if (currentIndex >= imageData.length) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = imageData.length - 1;
+
+            modalImg.src = imageData[currentIndex].url;
+            modalImg.alt = imageData[currentIndex].alt;
+            imageInfo.textContent = `${currentIndex + 1}/${imageData.length} - ${imageData[currentIndex].desc}`;
+
+            // Save to local storage
+            localStorage.setItem('lastViewedImage', imageData[currentIndex].url);
+        }
+
+        // Initialize the gallery when page loads
+        window.onload = function() {
+            createGallery();
+            checkLocalStorage();
+        };
+    </script>
+</body>
+</html>

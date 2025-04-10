@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 1: Basic Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .gallery-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .gallery-img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>Basic Image Gallery</h1>
+    <div class="gallery-container">
+        <img src="https://source.unsplash.com/random/300x300?nature1" alt="Nature 1" class="gallery-img">
+        <img src="https://source.unsplash.com/random/300x300?nature2" alt="Nature 2" class="gallery-img">
+        <img src="https://source.unsplash.com/random/300x300?nature3" alt="Nature 3" class="gallery-img">
+        <img src="https://source.unsplash.com/random/300x300?nature4" alt="Nature 4" class="gallery-img">
+        <img src="https://source.unsplash.com/random/300x300?nature5" alt="Nature 5" class="gallery-img">
+        <img src="https://source.unsplash.com/random/300x300?nature6" alt="Nature 6" class="gallery-img">
+    </div>
+</body>
+</html>

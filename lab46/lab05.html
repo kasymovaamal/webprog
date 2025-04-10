@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 5: Enhanced UX with Animations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .gallery-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform: scale(1);
+            opacity: 0.9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .gallery-img:hover {
+            transform: scale(1.05);
+            opacity: 1;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.show {
+            opacity: 1;
+            display: block;
+        }
+        .modal-content {
+            display: block;
+            margin: auto;
+            max-width: 80%;
+            max-height: 80%;
+            margin-top: 5%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0.7;
+        }
+        .close:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 0 3px 3px 0;
+            opacity: 0.7;
+        }
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            opacity: 1;
+            padding: 20px;
+        }
+        /* Slide animation */
+        .slide-in {
+            animation: slideIn 0.5s forwards;
+        }
+        .slide-out {
+            animation: slideOut 0.5s forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(-100%); opacity: 0; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Enhanced UX with Animations</h1>
+    <div class="gallery-container" id="gallery-container"></div>
+
+    <!-- Modal Structure -->
+    <div id="modal" class="modal" onclick="closeModal()">
+        <span class="close" onclick="event.stopPropagation(); closeModal()">&times;</span>
+        <a class="prev" onclick="event.stopPropagation(); plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="event.stopPropagation(); plusSlides(1)">&#10095;</a>
+        <img class="modal-content" id="modal-image">
+    </div>
+
+    <script>
+        // Image data
+        const imageData = [
+            { url: 'https://source.unsplash.com/random/600x400?nature1', alt: 'Nature 1' },
+            { url: 'https://source.unsplash.com/random/600x400?nature2', alt: 'Nature 2' },
+            { url: 'https://source.unsplash.com/random/600x400?nature3', alt: 'Nature 3' },
+            { url: 'https://source.unsplash.com/random/600x400?nature4', alt: 'Nature 4' },
+            { url: 'https://source.unsplash.com/random/600x400?nature5', alt: 'Nature 5' },
+            { url: 'https://source.unsplash.com/random/600x400?nature6', alt: 'Nature 6' }
+        ];
+
+        const galleryContainer = document.getElementById('gallery-container');
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modal-image');
+        let currentIndex = 0;
+        let isAnimating = false;
+
+        // Dynamically create gallery images
+        function createGallery() {
+            imageData.forEach((image, index) => {
+                const imgElement = document.createElement('img');
+                imgElement.src = image.url.replace('600x400', '300x300');
+                imgElement.alt = image.alt;
+                imgElement.classList.add('gallery-img');
+                imgElement.onclick = () => openModal(index);
+                galleryContainer.appendChild(imgElement);
+            });
+        }
+
+        function openModal(index) {
+            if (isAnimating) return;
+            currentIndex = index;
+            modalImg.src = imageData[currentIndex].url;
+            modalImg.alt = imageData[currentIndex].alt;
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            if (isAnimating) return;
+            modal.classList.remove('show');
+        }
+
+        function plusSlides(n) {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            // Add slide-out animation
+            modalImg.classList.add('slide-out');
+
+            setTimeout(() => {
+                // Change image after animation completes
+                currentIndex += n;
+                if (currentIndex >= imageData.length) currentIndex = 0;
+                if (currentIndex < 0) currentIndex = imageData.length - 1;
+
+                modalImg.src = imageData[currentIndex].url;
+                modalImg.alt = imageData[currentIndex].alt;
+
+                // Remove old animation and add slide-in
+                modalImg.classList.remove('slide-out');
+                modalImg.classList.add('slide-in');
+
+                setTimeout(() => {
+                    modalImg.classList.remove('slide-in');
+                    isAnimating = false;
+                }, 500);
+            }, 500);
+        }
+
+        // Initialize the gallery when page loads
+        window.onload = createGallery;
+    </script>
+</body>
+</html>
